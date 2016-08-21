@@ -1,7 +1,6 @@
 require([
-    "app/src/entities/Entities.js",
-    "app/src/systems/CollisionHandler.js"
-], function (entities, CollisionHandler) {
+    "app/src/entities/Entities.js"
+], function (entities) {
     var brickBreaker = null;
 
     var init = function () {
@@ -18,14 +17,13 @@ require([
         brickBreaker.add.spriteSheet(spriteSheet);
 
         var prepareGameObjects = function () {
-            entities.init(brickBreaker);
-
             brickBreaker.add.system(new Foundation.System.DPad(brickBreaker));
-            brickBreaker.add.system(new Foundation.System.Movement(brickBreaker));
-            brickBreaker.add.system(new Foundation.System.Animation(brickBreaker));
-            brickBreaker.add.system(new Foundation.System.CollisionDetection(brickBreaker));
-            brickBreaker.add.system(new CollisionHandler(brickBreaker));
+            brickBreaker.add.system(new Foundation.System.State(brickBreaker));
+            brickBreaker.add.system(new Foundation.System.Collision(brickBreaker));
+            brickBreaker.add.system(new Foundation.System.Restraint(brickBreaker));
             brickBreaker.add.system(new Foundation.System.Render(brickBreaker, "main-canvas"));
+
+            entities.init(brickBreaker);
 
             run();
         };
