@@ -6,6 +6,8 @@ define(function () {
             var state = null;
             var collision = null;
 
+            //TODO: This needs to be looked at and handled better.
+
             game.systems.forEach(function (system) {
                 if (system.type == "state") {
                     state = system;
@@ -22,7 +24,7 @@ define(function () {
                         entity.components.position.y += entity.components.physics.velocityY;
                     }
                 },
-                collidingWithPaddle: {
+                collidingWithEntity: {
                     init: function (entity) {
                         entity.components.physics.velocityY = -(entity.components.physics.velocityY);
                     },
@@ -33,9 +35,21 @@ define(function () {
                 }
             });
 
+            var collidingWithEntity = function (ball) {
+                ball.components.physics.velocityY = -(ball.components.physics.velocityY);
+                ball.components.position.y += ball.components.physics.velocityY;
+            };
+
             collision.on(TYPE, "paddle", function(entities){
                 var ballEntity = entities["ball"];
-                ballEntity.components.state.name = "collidingWithPaddle";
+
+                collidingWithEntity(ballEntity);
+            });
+
+            collision.on(TYPE, "brick", function(entities){
+                var ballEntity = entities["ball"];
+
+                collidingWithEntity(ballEntity);
             });
         },
         create: function (game) {
@@ -43,7 +57,7 @@ define(function () {
 
         entity.add.component("position", new Foundation.Component.Position({
             x: (game.width / 2) - 11,
-            y: 0
+            y: game.height - 100
         }));
 
         entity.add.component("size", new Foundation.Component.Size({w: 22, h: 22}));
@@ -62,7 +76,8 @@ define(function () {
         }))
 
         entity.add.component("collision", new Foundation.Component.Collision([
-            "paddle"
+            "paddle",
+            "brick"
         ]));
 
         entity.add.component("state", new Foundation.Component.State("moving"));

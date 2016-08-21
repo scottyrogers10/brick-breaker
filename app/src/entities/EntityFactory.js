@@ -5,7 +5,8 @@ define([
 ], function (paddle, brick, ball) {
     var entityFactory = {
         init: {
-            ball: ball.init
+            ball: ball.init,
+            brick: brick.init
         },
         create: {
             paddle: paddle.create,

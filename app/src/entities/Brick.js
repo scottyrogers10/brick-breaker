@@ -3,17 +3,39 @@ define(function () {
 
     var brick = {
         init: function(game){
-            // game.systems.state.on(TYPE, {
-            //
-            // });
-            //
-            // game.systems.collision.on(TYPE, "ball", function(event){
-            //     var brickEntity = event.entities[TYPE];
-            //     var ballEntity = event.entities["ball"];
-            //
-            //     brickEntity.components.state.name = "hit";
-            //     ballEntity.components.state.name = "hit";
-            // });
+            var state = null;
+            var collision = null;
+
+            //TODO: This needs to be looked at and handled better.
+
+            game.systems.forEach(function (system) {
+                if (system.type == "state") {
+                    state = system;
+                }
+
+                if (system.type == "collision") {
+                    collision = system;
+                }
+            });
+
+            state.on(TYPE, {
+                idle: {
+                    update: function (entity) {
+                        return;
+                    }
+                },
+                destroyed: {
+                    init: function (entity) {
+                        game.remove.entity(entity);
+                    }
+                }
+            });
+
+            collision.on(TYPE, "ball", function(entities){
+                var brickEntity = entities["brick"];
+
+                brickEntity.components.state.name = "destroyed";
+            });
         },
         create: function (game, x, y) {
         var entity = new Foundation.Entity(TYPE);
@@ -47,6 +69,10 @@ define(function () {
         //         currentFrame: 0
         //     }
         // }, 3));
+
+        entity.add.component("collision", new Foundation.Component.Collision([
+            "ball"
+        ]));
 
         entity.add.component("state", new Foundation.Component.State("idle"));
 

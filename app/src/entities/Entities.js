@@ -4,6 +4,7 @@ define([
     var entities = {
         init: function (game) {
             entityFactory.init.ball(game);
+            entityFactory.init.brick(game);
 
             game.add.entity(entityFactory.create.paddle(game));
             game.add.entity(entityFactory.create.ball(game));
