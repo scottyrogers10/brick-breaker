@@ -1,8 +1,9 @@
 define([
     "app/src/entities/Paddle.js",
     "app/src/entities/Brick.js",
-    "app/src/entities/Ball.js"
-], function (paddle, brick, ball) {
+    "app/src/entities/Ball.js",
+    "app/src/entities/Wall.js"
+], function (paddle, brick, ball, wall) {
     var entityFactory = {
         init: {
             ball: ball.init,
@@ -11,7 +12,8 @@ define([
         create: {
             paddle: paddle.create,
             brick: brick.create,
-            ball: ball.create
+            ball: ball.create,
+            wall: wall.create
         }
     };
 

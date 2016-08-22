@@ -38,6 +38,4 @@ require([
     };
 
     init();
-
-    window.brickBreaker = brickBreaker;
 });

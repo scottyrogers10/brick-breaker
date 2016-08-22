@@ -3,66 +3,82 @@ define(function () {
 
     var ball = {
         init: function(game){
-            var state = null;
-            var collision = null;
-
-            //TODO: This needs to be looked at and handled better.
-
-            game.systems.forEach(function (system) {
-                if (system.type == "state") {
-                    state = system;
-                }
-
-                if (system.type == "collision") {
-                    collision = system;
-                }
-            });
-
-            state.on(TYPE, {
+            game.systems.state.on(TYPE, {
                 moving: {
                     update: function (entity) {
-                        entity.components.position.y += entity.components.physics.velocityY;
-                    }
-                },
-                collidingWithEntity: {
-                    init: function (entity) {
-                        entity.components.physics.velocityY = -(entity.components.physics.velocityY);
-                    },
-                    update: function (entity) {
-                        entity.components.position.y += entity.components.physics.velocityY;
-                        entity.components.state.name = "moving";
+                        entity.components.position.y += entity.components.velocity.velY;
+                        entity.components.position.x += entity.components.velocity.velX;
                     }
                 }
             });
 
-            var collidingWithEntity = function (ball) {
-                ball.components.physics.velocityY = -(ball.components.physics.velocityY);
-                ball.components.position.y += ball.components.physics.velocityY;
-            };
-
-            collision.on(TYPE, "paddle", function(entities){
+            game.systems.collision.on(TYPE, "paddle", function(entities){
                 var ballEntity = entities["ball"];
+                var paddleEntity = entities["paddle"];
 
-                collidingWithEntity(ballEntity);
+                var ballPosition = ballEntity.components.position;
+                var ballSize = ballEntity.components.size;
+                var paddlePosition = paddleEntity.components.position;
+                var paddleSize = paddleEntity.components.size;
+
+                if (ballPosition.x < paddlePosition.x) {
+                    ballEntity.components.velocity.velX = -7;
+                }
+
+                if (ballPosition.x + ballSize.w > paddlePosition.x + paddleSize.w &&
+                    ballPosition.x < paddlePosition.x + paddleSize.w) {
+                    ballEntity.components.velocity.velX = 7;
+                }
+
+                //TODO: Still buggy if ball is hit on side, below paddle. Find a solution.
+
+                if (ballPosition.y + ballSize.h > paddlePosition.y + 2) {
+                    ballEntity.components.velocity.velY = -6;
+                    ballEntity.components.position.y += ballEntity.components.velocity.velY;
+                } else {
+                    ballEntity.components.velocity.velY = -(ballEntity.components.velocity.velY);
+                    ballEntity.components.position.y += ballEntity.components.velocity.velY;
+                }
             });
 
-            collision.on(TYPE, "brick", function(entities){
-                var ballEntity = entities["ball"];
+            var lastCollisionTick = 0;
 
-                collidingWithEntity(ballEntity);
+            game.systems.collision.on(TYPE, "brick", function(entities){
+                var ballEntity = entities["ball"];
+                var currentCollisionTick = game.tick;
+
+                if (lastCollisionTick !== currentCollisionTick) {
+                    ballEntity.components.velocity.velY = -(ballEntity.components.velocity.velY);
+                    ballEntity.components.position.y += ballEntity.components.velocity.velY;
+
+                    lastCollisionTick = currentCollisionTick;
+                }
+            });
+
+            game.systems.collision.on(TYPE, "wall", function (entities) {
+                var ballEntity = entities["ball"];
+                var wallEntity = entities["wall"];
+
+                if (wallEntity.components.size.h > 1) {
+                    ballEntity.components.velocity.velX = -(ballEntity.components.velocity.velX);
+                    ballEntity.components.position.x += ballEntity.components.velocity.velX;
+                } else {
+                    ballEntity.components.velocity.velY = -(ballEntity.components.velocity.velY);
+                    ballEntity.components.position.y += ballEntity.components.velocity.velY;
+                }
             });
         },
         create: function (game) {
         var entity = new Foundation.Entity(TYPE);
 
-        entity.add.component("position", new Foundation.Component.Position({
-            x: (game.width / 2) - 11,
-            y: game.height - 100
+        entity.add.component(new Foundation.Component.Position({
+            x: 0,
+            y: 185
         }));
 
-        entity.add.component("size", new Foundation.Component.Size({w: 22, h: 22}));
+        entity.add.component(new Foundation.Component.Size({w: 22, h: 22}));
 
-        entity.add.component("sprite", new Foundation.Component.Sprite({
+        entity.add.component(new Foundation.Component.Sprite({
             img: game.spriteSheet,
             srcX: 0,
             srcY: 0,
@@ -70,17 +86,18 @@ define(function () {
             srcH: 22
         }));
 
-        entity.add.component("physics", new Foundation.Component.Physics({
-            velocityX: 4,
-            velocityY: 4
-        }))
+        entity.add.component(new Foundation.Component.Velocity({
+            velX: 2,
+            velY: 6
+        }));
 
-        entity.add.component("collision", new Foundation.Component.Collision([
+        entity.add.component(new Foundation.Component.Collidable([
             "paddle",
-            "brick"
+            "brick",
+            "wall"
         ]));
 
-        entity.add.component("state", new Foundation.Component.State("moving"));
+        entity.add.component(new Foundation.Component.State("moving"));
 
         return entity;
         }

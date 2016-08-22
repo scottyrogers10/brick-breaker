@@ -21,9 +21,10 @@ define([
                 y += 32;
                 x = 0;
             }
-        },
-        update: function () {
 
+            game.add.entity(entityFactory.create.wall(game, 0, 0, game.width, 1));
+            game.add.entity(entityFactory.create.wall(game, 0, 0, 1, game.height));
+            game.add.entity(entityFactory.create.wall(game, game.width, 0, 1, game.height));
         }
     };
 
