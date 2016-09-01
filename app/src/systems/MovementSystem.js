@@ -15,15 +15,16 @@ define(function () {
 
         var paddle = rootEntity.filter(paddleEntityCheck)[0];
         var positionComponent = paddle.getComponentByType("position");
+        var velocityComponent = paddle.getComponentByType("velocity");
         var keyboardInputComponent = paddle.getComponentByType("keyboardInput");
         var pressed = keyboardInputComponent.pressed;
 
         if (pressed[37]) {
-            positionComponent.x -= 6;
+            positionComponent.x -= velocityComponent.velX * self.game.dt;
         }
 
         if (pressed[39]) {
-            positionComponent.x += 6;
+            positionComponent.x += velocityComponent.velY * self.game.dt;
         }
     };
 

@@ -9,7 +9,7 @@ define([
         position.y = game.getCameraByCanvasId("main-camera").height - 36;
 
         var size = new Axis.Component.Size();
-        size.w = 104;
+        size.w = 106;
         size.h = 24;
 
         var keyboardInput = new Axis.Component.KeyboardInput();
@@ -18,10 +18,14 @@ define([
         sprite.imgSrc = "app/img/spritesheet.png";
         sprite.srcX = 38;
         sprite.srcY = 0;
-        sprite.srcW = 104;
+        sprite.srcW = 106;
         sprite.srcH = 24;
 
-        entity.addComponents([position, size, sprite, keyboardInput]);
+        var velocity = new Axis.Component.Velocity();
+        velocity.velX = .50;
+        velocity.velY = .50;
+
+        entity.addComponents([position, size, sprite, keyboardInput, velocity]);
         return entity;
     };
 
