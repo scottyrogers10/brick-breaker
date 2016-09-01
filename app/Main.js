@@ -1,7 +1,8 @@
 require([
     "lib/axis-js/Axis.js",
-    "app/src/entities/Entities.js"
-], function (Axis, entities) {
+    "app/src/entities/Entities.js",
+    "app/src/systems/MovementSystem"
+], function (Axis, entities, MovementSystem) {
     var init = function () {
         var brickBreaker = new Axis.Game();
 
@@ -11,8 +12,10 @@ require([
 
         entities.init(brickBreaker);
 
-        brickBreaker.addSystem(new Axis.System.SpriteSheetSystem);
-        brickBreaker.addSystem(new Axis.System.RenderSystem);
+        brickBreaker.addSystem(new Axis.System.SpriteSheet);
+        brickBreaker.addSystem(new Axis.System.KeyboardInput);
+        brickBreaker.addSystem(new MovementSystem);
+        brickBreaker.addSystem(new Axis.System.Render);
 
         brickBreaker.runGame();
 
