@@ -3,45 +3,41 @@ define(function (require) {
     var positionComponent = require("axis/components/Position");
     var sizeComponent = require("axis/components/Size");
     var rigidBodyComponent = require("axis/components/RigidBody");
-    var keyboardInputComponent = require("axis/components/KeyboardInput");
     var spriteComponent = require("axis/components/Sprite");
     var velocityComponent = require("axis/components/Velocity");
     var collidableComponent = require("axis/components/Collidable");
 
-    var paddle = function (game) {
-        var entity = new Axis.Entity("paddle");
+    var ball = function (game) {
+        var entity = new Axis.Entity("ball");
 
         var position = new positionComponent();
-        position.x = (game.getCameraById("main-camera").width / 2) - 52;
-        position.y = game.getCameraById("main-camera").height - 36;
+        position.x = (game.getCameraById("main-camera").width / 2) - 11;
+        position.y = game.getCameraById("main-camera").height - 55;
 
         var size = new sizeComponent();
-        size.w = 104;
-        size.h = 24;
+        size.w = 22;
+        size.h = 22;
 
         var rigidBody = new rigidBodyComponent();
-        rigidBody.w = 104;
-        rigidBody.h = 24;
+        rigidBody.w = 22;
+        rigidBody.h = 22;
 
         var collidable = new collidableComponent();
-        collidable.isStatic = true;
-
-        var keyboardInput = new keyboardInputComponent();
 
         var sprite = new spriteComponent();
         sprite.imgSrc = "app/img/spritesheet.png";
-        sprite.srcX = 38;
+        sprite.srcX = 0;
         sprite.srcY = 0;
-        sprite.srcW = 104;
-        sprite.srcH = 24;
+        sprite.srcW = 22;
+        sprite.srcH = 22;
 
         var velocity = new velocityComponent();
-        velocity.x = .50;
-        velocity.y = .50;
+        velocity.x = .30;
+        velocity.y = -.30;
 
-        entity.loadComponents([position, size, rigidBody, collidable, keyboardInput, sprite, velocity]);
+        entity.loadComponents([position, size, rigidBody, collidable, sprite, velocity]);
         return entity;
     };
 
-    return paddle;
+    return ball;
 });
