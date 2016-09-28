@@ -24,7 +24,6 @@ define(function (require) {
         rigidBody.h = 24;
 
         var collidable = new collidableComponent();
-        collidable.isStatic = true;
 
         var keyboardInput = new keyboardInputComponent();
 

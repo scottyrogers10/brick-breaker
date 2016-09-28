@@ -5,6 +5,7 @@ define(function (require) {
     var spriteComponent = require("axis/components/Sprite");
     var rigidBodyComponent = require("axis/components/RigidBody");
     var collidableComponent = require("axis/components/Collidable");
+    var stateComponent = require("axis/components/State");
 
     var brick = function (game, x, y) {
         var entity = new Axis.Entity("brick");
@@ -31,7 +32,14 @@ define(function (require) {
         sprite.srcW = 64;
         sprite.srcH = 32;
 
-        entity.loadComponents([position, size, rigidBody, collidable, sprite]);
+        var state = new stateComponent();
+        state.currentState = "active";
+        state.states = {
+            active: [position, size, rigidBody, collidable, sprite, state],
+            destroyed: []
+        };
+
+        entity.loadComponents(state.states.active);
         return entity;
     };
 

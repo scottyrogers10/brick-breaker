@@ -6,7 +6,9 @@ define(function (require) {
     var renderSystem = require("axis/systems/RenderSystem");
     var paddleMovementSystem = require("systems/PaddleMovementSystem");
     var ballMovementSystem = require("systems/BallMovementSystem");
-    var rigidCollisionSystem = require("axis/systems/rigidCollisionSystem");
+    var rigidCollisionSystem = require("axis/systems/RigidCollisionSystem");
+    var ballCollisionHandlerSystem = require("systems/BallCollisionHandlerSystem");
+    var stateSystem = require("axis/systems/StateSystem");
 
     var init = function () {
         var brickBreaker = new Axis.Game();
@@ -18,9 +20,11 @@ define(function (require) {
         brickBreaker.addSpriteSheet("app/img/spritesheet.png");
         brickBreaker.addSystems([spriteSheetSystem,
                                  keyboardInputSystem,
+                                 stateSystem,
                                  paddleMovementSystem,
                                  ballMovementSystem,
                                  rigidCollisionSystem,
+                                 ballCollisionHandlerSystem,
                                  renderSystem]);
 
         entities.init(brickBreaker);

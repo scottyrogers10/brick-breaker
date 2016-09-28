@@ -6,13 +6,14 @@ define(function (require) {
     var spriteComponent = require("axis/components/Sprite");
     var velocityComponent = require("axis/components/Velocity");
     var collidableComponent = require("axis/components/Collidable");
+    var restraintComponent = require("axis/components/Restraint");
 
     var ball = function (game) {
         var entity = new Axis.Entity("ball");
 
         var position = new positionComponent();
         position.x = (game.getCameraById("main-camera").width / 2) - 11;
-        position.y = game.getCameraById("main-camera").height - 55;
+        position.y = game.getCameraById("main-camera").height - 59;
 
         var size = new sizeComponent();
         size.w = 22;
@@ -35,7 +36,12 @@ define(function (require) {
         velocity.x = .30;
         velocity.y = -.30;
 
-        entity.loadComponents([position, size, rigidBody, collidable, sprite, velocity]);
+        var restraint = new restraintComponent();
+        restraint.left = 0;
+        restraint.right = game.getCameraById("main-camera").width;
+        restraint.top = 0;
+
+        entity.loadComponents([position, size, rigidBody, collidable, sprite, velocity, restraint]);
         return entity;
     };
 
