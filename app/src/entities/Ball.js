@@ -16,12 +16,12 @@ define(function (require) {
         position.y = game.getCameraById("main-camera").height - 59;
 
         var size = new sizeComponent();
-        size.w = 22;
-        size.h = 22;
+        size.width = 22;
+        size.height = 22;
 
         var rigidBody = new rigidBodyComponent();
-        rigidBody.w = 22;
-        rigidBody.h = 22;
+        rigidBody.width = 22;
+        rigidBody.height = 22;
 
         var collidable = new collidableComponent();
 

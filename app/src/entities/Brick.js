@@ -15,12 +15,12 @@ define(function (require) {
         position.y = y;
 
         var size = new sizeComponent();
-        size.w = 64;
-        size.h = 32;
+        size.width = 64;
+        size.height = 32;
 
         var rigidBody = new rigidBodyComponent();
-        rigidBody.w = 64;
-        rigidBody.h = 32;
+        rigidBody.width = 64;
+        rigidBody.height = 32;
 
         var collidable = new collidableComponent();
         collidable.isStatic = true;
@@ -39,7 +39,9 @@ define(function (require) {
             destroyed: []
         };
 
-        entity.loadComponents(state.states.active);
+        var startingState = state.states[state.currentState];
+
+        entity.loadComponents(startingState);
         return entity;
     };
 

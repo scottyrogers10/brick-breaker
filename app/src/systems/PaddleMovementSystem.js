@@ -26,7 +26,7 @@ define(function () {
             }
 
             if (pressed[39]) {
-                positionComponent.x += velocityComponent.y * self.game.dt;
+                positionComponent.x += velocityComponent.x * self.game.dt;
             }
         }
     };

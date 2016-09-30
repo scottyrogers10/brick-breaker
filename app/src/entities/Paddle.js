@@ -16,12 +16,12 @@ define(function (require) {
         position.y = game.getCameraById("main-camera").height - 36;
 
         var size = new sizeComponent();
-        size.w = 104;
-        size.h = 24;
+        size.width = 104;
+        size.height = 24;
 
         var rigidBody = new rigidBodyComponent();
-        rigidBody.w = 104;
-        rigidBody.h = 24;
+        rigidBody.width = 104;
+        rigidBody.height = 24;
 
         var collidable = new collidableComponent();
 
@@ -36,7 +36,6 @@ define(function (require) {
 
         var velocity = new velocityComponent();
         velocity.x = .50;
-        velocity.y = .50;
 
         entity.loadComponents([position, size, rigidBody, collidable, keyboardInput, sprite, velocity]);
         return entity;

@@ -25,17 +25,19 @@ define(function () {
                 var stateComponent = collidingEntities[i].getActiveComponentByType("state");
                 ballVelocityComponent.y = -ballVelocityComponent.y;
                 stateComponent.currentState = "destroyed";
+
+                this.game.world.rootEntity.removeChildEntityById(collidingEntities[i].id);
             }
 
             if (collidingEntities[i].type === "paddle" && this.lastCollisionType !== "paddle") {
                 var paddlePositionComponent = collidingEntities[i].getActiveComponentByType("position");
                 var paddleSizeComponent = collidingEntities[i].getActiveComponentByType("size");
 
-                if (paddlePositionComponent.x + 20 > ballPositionComponent.x + ballSizeComponent.w) {
+                if (paddlePositionComponent.x + 20 > ballPositionComponent.x + ballSizeComponent.width) {
                     ballVelocityComponent.x = -Math.abs(ballVelocityComponent.x);
                 }
 
-                if (paddlePositionComponent.x + paddleSizeComponent.w - 20 < ballPositionComponent.x) {
+                if (paddlePositionComponent.x + paddleSizeComponent.width - 20 < ballPositionComponent.x) {
                     ballVelocityComponent.x = Math.abs(ballVelocityComponent.x);
                 }
 
@@ -47,22 +49,22 @@ define(function () {
             this.lastCollisionType = collidingEntities[i - 1].type;
         }
 
-        if (ballRestraintComponent.restraining.length > 0) {
-            var restraining = ballRestraintComponent.restraining;
-            for (var i = 0; i < restraining.length; i++) {
-                if (restraining[i] === "left") {
+        if (ballRestraintComponent.restrainingSides.length > 0) {
+            var restrainingSides = ballRestraintComponent.restrainingSides;
+            for (var i = 0; i < restrainingSides.length; i++) {
+                if (restrainingSides[i] === "left") {
                     ballVelocityComponent.x = -ballVelocityComponent.x;
                     ballPositionComponent.x = ballRestraintComponent.left;
                     this.lastCollisionType = "left";
                 }
 
-                if (restraining[i] === "right") {
+                if (restrainingSides[i] === "right") {
                     ballVelocityComponent.x = -ballVelocityComponent.x;
-                    ballPositionComponent.x = ballRestraintComponent.right - ballSizeComponent.h;
+                    ballPositionComponent.x = ballRestraintComponent.right - ballSizeComponent.height;
                     this.lastCollisionType = "right";
                 }
 
-                if (restraining[i] === "top") {
+                if (restrainingSides[i] === "top") {
                     ballVelocityComponent.y = -ballVelocityComponent.y;
                     ballPositionComponent.y = ballRestraintComponent.top;
                     this.lastCollisionType = "top";
