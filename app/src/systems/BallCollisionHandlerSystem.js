@@ -69,6 +69,10 @@ define(function () {
                     ballPositionComponent.y = ballRestraintComponent.top;
                     this.lastCollisionType = "top";
                 }
+
+                if (restrainingSides[i] === "bottom") {
+                    this.game.pause();
+                }
             }
         }
     };

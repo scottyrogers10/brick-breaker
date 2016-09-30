@@ -40,6 +40,7 @@ define(function (require) {
         restraint.left = 0;
         restraint.right = game.getCameraById("main-camera").width;
         restraint.top = 0;
+        restraint.bottom = game.getCameraById("main-camera").height + 22;
 
         entity.loadComponents([position, size, rigidBody, collidable, sprite, velocity, restraint]);
         return entity;

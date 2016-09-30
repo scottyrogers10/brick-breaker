@@ -29,7 +29,23 @@ define(function (require) {
 
         entities.init(brickBreaker);
 
-        brickBreaker.run();
+        var currentGameState = "play";
+        var gameState = {
+            play: function () {
+                brickBreaker.play();
+                currentGameState = "pause";
+            },
+            pause: function () {
+                brickBreaker.pause();
+                currentGameState = "play";
+            }
+        };
+
+        window.addEventListener("keydown", function (event) {
+            if (event.keyCode === 32) {
+                gameState[currentGameState]();
+            }
+        });
 
         window.brickBreaker = brickBreaker;
     };
